@@ -22,8 +22,10 @@ public class CryptoLevel extends GameLevelPanel {
     private final int JUMP_STRENGTH = -8;
     private boolean gameStarted = false;
     private boolean gameOver = false;
+    private boolean flashState = false;  // Для ефекту миготіння
     private JButton restartButton;
     private Timer gameTimer;
+    private Timer flashTimer;  // Таймер для ефекту миготіння
     private List<Rectangle> obstacles;
     private List<Rectangle> grapes;
     private int grapesCollected = 0;
@@ -50,7 +52,30 @@ public class CryptoLevel extends GameLevelPanel {
             }
         });
         initRestartButton();
+        initFlashTimer();
     }
+    private void initFlashTimer() {
+        // Визначаємо рандомний інтервал часу від 5 до 10 секунд
+        int delay = new Random().nextInt(5001) + 5000;  // 5000 до 10000 мілісекунд (5 до 10 секунд)
+        flashTimer = new Timer(delay, e -> {
+            flashState = !flashState;  // Зміна стану миготіння
+            repaint();
+
+            // Запускаємо таймер, щоб вимкнути миготіння через 100 мілісекунд
+            new Timer(100, event -> {
+                flashState = false;
+                repaint();
+                ((Timer)event.getSource()).stop();  // Зупиняємо таймер вимкнення миготіння
+            }).start();
+
+            // Рестартуємо таймер миготіння з новим інтервалом
+            ((Timer)e.getSource()).setInitialDelay(new Random().nextInt(5001) + 5000);
+            ((Timer)e.getSource()).restart();
+        });
+        flashTimer.setRepeats(false);  // Забезпечуємо, що таймер спрацьовує лише один раз за інтервал
+        flashTimer.start();
+    }
+
 
     @Override
     public void addNotify() {
@@ -80,7 +105,7 @@ public class CryptoLevel extends GameLevelPanel {
 
     private void loadObstacleImage() {
         try {
-            obstacleImage = ImageIO.read(getClass().getResource("столб.jpg"));;
+            obstacleImage = ImageIO.read(getClass().getResource("столб.jpg"));
             obstacleImage = scaleImage(obstacleImage, 0.50);
             flippedObstacleImage = flipImageVertically(obstacleImage);
         } catch (IOException e) {
@@ -165,24 +190,29 @@ public class CryptoLevel extends GameLevelPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if (backgroundImage != null) {
-            g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
-        }
-        if (birdImage != null) {
-            g.drawImage(birdImage, birdX, birdY, this);
-        }
-        if (obstacleImage != null) {
-            for (Rectangle obstacle : obstacles) {
-                if (obstacle.y == 0) {
-                    g.drawImage(obstacleImage, obstacle.x, obstacle.y, obstacle.width, obstacle.height, this); // Верхнее препятствие
-                } else {
-                    g.drawImage(flippedObstacleImage, obstacle.x, obstacle.y, obstacle.width, obstacle.height, this); // Нижнее препятствие
+        if (flashState) {
+            g.setColor(Color.WHITE);
+            g.fillRect(0, 0, getWidth(), getHeight());
+        } else {
+            if (backgroundImage != null) {
+                g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+            }
+            if (birdImage != null) {
+                g.drawImage(birdImage, birdX, birdY, this);
+            }
+            if (obstacleImage != null) {
+                for (Rectangle obstacle : obstacles) {
+                    if (obstacle.y == 0) {
+                        g.drawImage(obstacleImage, obstacle.x, obstacle.y, obstacle.width, obstacle.height, this); // Верхнее препятствие
+                    } else {
+                        g.drawImage(flippedObstacleImage, obstacle.x, obstacle.y, obstacle.width, obstacle.height, this); // Нижнее препятствие
+                    }
                 }
             }
-        }
-        if (grapeImage != null) {
-            for (Rectangle grape : grapes) {
-                g.drawImage(grapeImage, grape.x, grape.y, grape.width, grape.height, this);
+            if (grapeImage != null) {
+                for (Rectangle grape : grapes) {
+                    g.drawImage(grapeImage, grape.x, grape.y, grape.width, grape.height, this);
+                }
             }
         }
     }
@@ -201,7 +231,6 @@ public class CryptoLevel extends GameLevelPanel {
                 vy = 0;
             }
 
-
             List<Rectangle> newObstacles = new ArrayList<>();
             for (Rectangle obstacle : obstacles) {
                 obstacle.x -= 5;
@@ -215,7 +244,6 @@ public class CryptoLevel extends GameLevelPanel {
             }
             obstacles = newObstacles;
 
-
             List<Rectangle> newGrapes = new ArrayList<>();
             for (Rectangle grape : grapes) {
                 grape.x -= 2;
@@ -228,7 +256,6 @@ public class CryptoLevel extends GameLevelPanel {
                 }
             }
             grapes = newGrapes;
-
 
             if (obstacles.isEmpty() || obstacles.get(obstacles.size() - 1).x < 600) {
                 int gapHeight = 300;
@@ -248,7 +275,6 @@ public class CryptoLevel extends GameLevelPanel {
 
                 obstacles.add(new Rectangle(800, 0, obstacleWidth, upperObstacleHeight));
                 obstacles.add(new Rectangle(800, 600 - lowerObstacleHeight, obstacleWidth, lowerObstacleHeight));
-
 
                 if (grapeImage != null && random.nextInt(5) == 0) {
                     int grapeWidth = grapeImage.getWidth();
@@ -279,4 +305,3 @@ public class CryptoLevel extends GameLevelPanel {
         }
     }
 }
-
