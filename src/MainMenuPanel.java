@@ -17,6 +17,8 @@ public class MainMenuPanel extends JPanel {
         initButtonsPanel();
     }
 
+
+
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(backgroundImage, 0, 0, this.getWidth(), this.getHeight(), this);
@@ -35,18 +37,22 @@ public class MainMenuPanel extends JPanel {
         buttonsPanel.add(titleLabel);
         buttonsPanel.add(Box.createVerticalStrut(20));
 
-        String[] buttonLabels = {"Indian Summer", "Underworld", "Water World", "Champagne Factory"};
+        String[] buttonLabels = {"Indian Summer", "Underworld", "Water World", "Champagne Factory", "Scores"};
         for (String label : buttonLabels) {
             JButton button = createRoundedButton(label);
             button.setAlignmentX(Component.CENTER_ALIGNMENT);
             button.setMaximumSize(new Dimension(200, 30));
-            button.addActionListener(e -> gameFrame.switchTo(label.replace(" ", "") + "Level"));
+            if (label.equals("Scores")) {
+                button.addActionListener(e -> gameFrame.switchTo("Scores"));
+            } else {
+                button.addActionListener(e -> gameFrame.switchTo(label.replace(" ", "") + "Level"));
+            }
             buttonsPanel.add(button);
             buttonsPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         }
-
         add(buttonsPanel, BorderLayout.CENTER);
     }
+
 
     private JButton createRoundedButton(String text) {
         JButton button = new JButton(text) {

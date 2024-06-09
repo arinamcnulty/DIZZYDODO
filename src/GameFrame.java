@@ -18,11 +18,10 @@ public class GameFrame extends JFrame {
         cardPanel.add(new UnderworldLevel(this), "UnderworldLevel");
         cardPanel.add(new WaterWorldLevel(this), "WaterWorldLevel");
         cardPanel.add(new ChampagneFactoryLevel(this), "ChampagneFactoryLevel");
-
+        cardPanel.add(new ScoresPanel(this), "Scores");
         getContentPane().add(cardPanel);
         setVisible(true);
     }
-
     public void switchTo(String cardName) {
         cardLayout.show(cardPanel, cardName);
     }
