@@ -17,12 +17,12 @@ public class ChampagneFactoryLevel extends GameLevelPanel {
     private BufferedImage grapeImage;
     private int birdY;
     private int birdX;
-    private float vy = 0; // Вертикальная скорость птички
+    private float vy = 0;
     private final float GRAVITY = 1.0f; // Константа гравитации, увеличьте для более быстрого падения
-    private final int JUMP_STRENGTH = -8; // Сила подъема, увеличьте для более быстрого подъема
-    private boolean gameStarted = false; // Состояние игры
-    private boolean gameOver = false; // Состояние завершения игры
-    private JButton restartButton; // Кнопка перезапуска
+    private final int JUMP_STRENGTH = -8;
+    private boolean gameStarted = false;
+    private boolean gameOver = false;
+    private JButton restartButton;
     private Timer gameTimer;
     private List<Rectangle> obstacles; // Список препятствий
     private List<Rectangle> grapes; // Список виноградинок
