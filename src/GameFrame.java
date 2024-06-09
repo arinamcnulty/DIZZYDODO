@@ -18,6 +18,7 @@ public class GameFrame extends JFrame {
         cardPanel.add(new UnderworldLevel(this), "UnderworldLevel");
         cardPanel.add(new WaterWorldLevel(this), "WaterWorldLevel");
         cardPanel.add(new ChampagneFactoryLevel(this), "ChampagneFactoryLevel");
+        cardPanel.add(new CryptoLevel(this), "CryptoLevel");
         cardPanel.add(new ScoresPanel(this), "Scores");
         getContentPane().add(cardPanel);
         setVisible(true);

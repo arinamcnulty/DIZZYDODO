@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class WaterWorldLevel extends GameLevelPanel {
+public class CryptoLevel extends GameLevelPanel {
     private BufferedImage backgroundImage;
     private BufferedImage birdImage;
     private BufferedImage obstacleImage;
@@ -29,7 +29,7 @@ public class WaterWorldLevel extends GameLevelPanel {
     private int grapesCollected = 0;
     private Random random;
 
-    public WaterWorldLevel(GameFrame gameFrame) {
+    public CryptoLevel(GameFrame gameFrame) {
         super(gameFrame);
         loadBackgroundImage();
         loadBirdImage();
@@ -61,7 +61,7 @@ public class WaterWorldLevel extends GameLevelPanel {
 
     private void loadBackgroundImage() {
         try {
-            backgroundImage = ImageIO.read(getClass().getResource("/waterworldlevelFON.jpg"));
+            backgroundImage = ImageIO.read(getClass().getResource("/CryptoFON.jpg"));
         } catch (IOException e) {
             e.printStackTrace();
             backgroundImage = null;
@@ -80,8 +80,8 @@ public class WaterWorldLevel extends GameLevelPanel {
 
     private void loadObstacleImage() {
         try {
-            obstacleImage = ImageIO.read(getClass().getResource("/трава.jpg"));
-            obstacleImage = scaleImage(obstacleImage, 0.35);
+            obstacleImage = ImageIO.read(getClass().getResource("столб.jpg"));;
+            obstacleImage = scaleImage(obstacleImage, 0.50);
             flippedObstacleImage = flipImageVertically(obstacleImage);
         } catch (IOException e) {
             e.printStackTrace();
@@ -91,7 +91,7 @@ public class WaterWorldLevel extends GameLevelPanel {
 
     private void loadGrapeImage() {
         try {
-            grapeImage = ImageIO.read(getClass().getResource("/ракушка.jpg"));
+            grapeImage = ImageIO.read(getClass().getResource("/cryptostick.jpg"));
             grapeImage = scaleImage(grapeImage, 0.15);
         } catch (IOException e) {
             e.printStackTrace();
@@ -143,7 +143,7 @@ public class WaterWorldLevel extends GameLevelPanel {
         if (restartButton != null) {
             restartButton.setVisible(true);
             restartButton.setEnabled(true);
-            JOptionPane.showMessageDialog(this, "Ви зібрали " + grapesCollected + " перлин!");
+            JOptionPane.showMessageDialog(this, "Ви зібрали " + grapesCollected + " монет!");
         }
     }
 

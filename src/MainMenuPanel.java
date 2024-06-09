@@ -37,7 +37,7 @@ public class MainMenuPanel extends JPanel {
         buttonsPanel.add(titleLabel);
         buttonsPanel.add(Box.createVerticalStrut(20));
 
-        String[] buttonLabels = {"Indian Summer", "Underworld", "Water World", "Champagne Factory", "Scores"};
+        String[] buttonLabels = {"Indian Summer", "Underworld", "Water World", "Champagne Factory", "Crypto" , "Scores"};
         for (String label : buttonLabels) {
             JButton button = createRoundedButton(label);
             button.setAlignmentX(Component.CENTER_ALIGNMENT);
