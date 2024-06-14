@@ -15,6 +15,7 @@ public class UnderworldLevel extends GameLevelPanel {
     private BufferedImage obstacleImage;
     private BufferedImage flippedObstacleImage;
     private BufferedImage grapeImage;
+    private BufferedImage skeletonImage;
     private int birdY;
     private int birdX;
     private float vy = 0;
@@ -26,6 +27,7 @@ public class UnderworldLevel extends GameLevelPanel {
     private Timer gameTimer;
     private List<Rectangle> obstacles;
     private List<Rectangle> grapes;
+    private List<Rectangle> skeletons;
     private int grapesCollected = 0;
     private Random random;
 
@@ -35,6 +37,7 @@ public class UnderworldLevel extends GameLevelPanel {
         loadBirdImage();
         loadObstacleImage();
         loadGrapeImage();
+        loadSkeletonImage(); // Загрузка образа скелета
         setFocusable(true);
         requestFocusInWindow();
         random = new Random();
@@ -99,6 +102,16 @@ public class UnderworldLevel extends GameLevelPanel {
         }
     }
 
+    private void loadSkeletonImage() {
+        try {
+            skeletonImage = ImageIO.read(getClass().getResource("/скелет (1).jpg"));
+            skeletonImage = scaleImage(skeletonImage, 0.10);
+        } catch (IOException e) {
+            e.printStackTrace();
+            skeletonImage = null;
+        }
+    }
+
     private BufferedImage scaleImage(BufferedImage srcImg, double factor) {
         int scaledWidth = (int) (srcImg.getWidth() * factor);
         int scaledHeight = (int) (srcImg.getHeight() * factor);
@@ -155,6 +168,7 @@ public class UnderworldLevel extends GameLevelPanel {
         gameOver = false;
         obstacles = new ArrayList<>();
         grapes = new ArrayList<>();
+        skeletons = new ArrayList<>(); // Сброс списка скелетов
         grapesCollected = 0;
         if (restartButton != null) {
             restartButton.setVisible(false);
@@ -174,15 +188,20 @@ public class UnderworldLevel extends GameLevelPanel {
         if (obstacleImage != null) {
             for (Rectangle obstacle : obstacles) {
                 if (obstacle.y == 0) {
-                    g.drawImage(obstacleImage, obstacle.x, obstacle.y, obstacle.width, obstacle.height, this); // Верхнее препятствие
+                    g.drawImage(obstacleImage, obstacle.x, obstacle.y, obstacle.width, obstacle.height, this);
                 } else {
-                    g.drawImage(flippedObstacleImage, obstacle.x, obstacle.y, obstacle.width, obstacle.height, this); // Нижнее препятствие
+                    g.drawImage(flippedObstacleImage, obstacle.x, obstacle.y, obstacle.width, obstacle.height, this);
                 }
             }
         }
         if (grapeImage != null) {
             for (Rectangle grape : grapes) {
                 g.drawImage(grapeImage, grape.x, grape.y, grape.width, grape.height, this);
+            }
+        }
+        if (skeletonImage != null) {
+            for (Rectangle skeleton : skeletons) {
+                g.drawImage(skeletonImage, skeleton.x, skeleton.y, skeleton.width, skeleton.height, this);
             }
         }
     }
@@ -201,7 +220,6 @@ public class UnderworldLevel extends GameLevelPanel {
                 vy = 0;
             }
 
-
             List<Rectangle> newObstacles = new ArrayList<>();
             for (Rectangle obstacle : obstacles) {
                 obstacle.x -= 5;
@@ -214,7 +232,6 @@ public class UnderworldLevel extends GameLevelPanel {
                 }
             }
             obstacles = newObstacles;
-
 
             List<Rectangle> newGrapes = new ArrayList<>();
             for (Rectangle grape : grapes) {
@@ -229,6 +246,18 @@ public class UnderworldLevel extends GameLevelPanel {
             }
             grapes = newGrapes;
 
+            List<Rectangle> newSkeletons = new ArrayList<>();
+            for (Rectangle skeleton : skeletons) {
+                skeleton.y += 5; // Падение скелетов вниз
+                if (skeleton.y < 600) {
+                    newSkeletons.add(skeleton);
+                }
+                if (skeleton.intersects(new Rectangle(birdX, birdY, birdImage.getWidth(), birdImage.getHeight()))) {
+                    gameOver = true;
+                    showRestartButton();
+                }
+            }
+            skeletons = newSkeletons;
 
             if (obstacles.isEmpty() || obstacles.get(obstacles.size() - 1).x < 600) {
                 int gapHeight = 300;
@@ -249,7 +278,6 @@ public class UnderworldLevel extends GameLevelPanel {
                 obstacles.add(new Rectangle(800, 0, obstacleWidth, upperObstacleHeight));
                 obstacles.add(new Rectangle(800, 600 - lowerObstacleHeight, obstacleWidth, lowerObstacleHeight));
 
-
                 if (grapeImage != null && random.nextInt(5) == 0) {
                     int grapeWidth = grapeImage.getWidth();
                     int grapeHeight = grapeImage.getHeight();
@@ -257,6 +285,16 @@ public class UnderworldLevel extends GameLevelPanel {
                     int grapeY = upperObstacleHeight + random.nextInt(gapHeight - grapeHeight);
 
                     grapes.add(new Rectangle(grapeX, grapeY, grapeWidth, grapeHeight));
+                }
+            }
+
+            if (skeletons.isEmpty() || skeletons.get(skeletons.size() - 1).y > 200) {
+                if (skeletonImage != null && random.nextInt(3) == 0) {
+                    int skeletonWidth = skeletonImage.getWidth();
+                    int skeletonHeight = skeletonImage.getHeight();
+                    int skeletonX = random.nextInt(800 - skeletonWidth);
+
+                    skeletons.add(new Rectangle(skeletonX, 0, skeletonWidth, skeletonHeight));
                 }
             }
         }
@@ -279,4 +317,3 @@ public class UnderworldLevel extends GameLevelPanel {
         }
     }
 }
-

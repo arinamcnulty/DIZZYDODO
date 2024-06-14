@@ -26,6 +26,8 @@ public class WaterWorldLevel extends GameLevelPanel {
     private Timer gameTimer;
     private List<Rectangle> obstacles;
     private List<Rectangle> grapes;
+    private List<Point> obstacleOriginalPositions; // Исходные позиции нижних препятствий
+    private List<Integer> obstacleDirections; // Направления движения нижних препятствий
     private int grapesCollected = 0;
     private Random random;
 
@@ -155,6 +157,8 @@ public class WaterWorldLevel extends GameLevelPanel {
         gameOver = false;
         obstacles = new ArrayList<>();
         grapes = new ArrayList<>();
+        obstacleOriginalPositions = new ArrayList<>();
+        obstacleDirections = new ArrayList<>();
         grapesCollected = 0;
         if (restartButton != null) {
             restartButton.setVisible(false);
@@ -201,20 +205,51 @@ public class WaterWorldLevel extends GameLevelPanel {
                 vy = 0;
             }
 
-
             List<Rectangle> newObstacles = new ArrayList<>();
-            for (Rectangle obstacle : obstacles) {
-                obstacle.x -= 5;
-                if (obstacle.x + obstacle.width > 0) {
-                    newObstacles.add(obstacle);
+            List<Point> newObstacleOriginalPositions = new ArrayList<>();
+            List<Integer> newObstacleDirections = new ArrayList<>();
+            for (int i = 0; i < obstacles.size(); i++) {
+                Rectangle obstacle = obstacles.get(i);
+                if (obstacle.y > 0) {
+                    Point originalPosition = obstacleOriginalPositions.get(i);
+                    int direction = obstacleDirections.get(i);
+
+                    obstacle.x -= 5;
+
+                    if (direction == 1) {
+                        obstacle.y += 1;
+                        if (obstacle.y >= originalPosition.y + 10) {
+                            direction = -1;
+                        }
+                    } else {
+                        obstacle.y -= 1;
+                        if (obstacle.y <= originalPosition.y - 10) {
+                            direction = 1;
+                        }
+                    }
+
+                    if (obstacle.x + obstacle.width > 0) {
+                        newObstacles.add(obstacle);
+                        newObstacleOriginalPositions.add(originalPosition);
+                        newObstacleDirections.add(direction);
+                    }
+                } else {
+                    obstacle.x -= 5;
+                    if (obstacle.x + obstacle.width > 0) {
+                        newObstacles.add(obstacle);
+                        newObstacleOriginalPositions.add(new Point(obstacle.x, obstacle.y));
+                        newObstacleDirections.add(0);
+                    }
                 }
+
                 if (obstacle.intersects(new Rectangle(birdX, birdY, birdImage.getWidth(), birdImage.getHeight()))) {
                     gameOver = true;
                     showRestartButton();
                 }
             }
             obstacles = newObstacles;
-
+            obstacleOriginalPositions = newObstacleOriginalPositions;
+            obstacleDirections = newObstacleDirections;
 
             List<Rectangle> newGrapes = new ArrayList<>();
             for (Rectangle grape : grapes) {
@@ -228,7 +263,6 @@ public class WaterWorldLevel extends GameLevelPanel {
                 }
             }
             grapes = newGrapes;
-
 
             if (obstacles.isEmpty() || obstacles.get(obstacles.size() - 1).x < 600) {
                 int gapHeight = 300;
@@ -246,9 +280,16 @@ public class WaterWorldLevel extends GameLevelPanel {
 
                 int obstacleWidth = obstacleImage.getWidth();
 
-                obstacles.add(new Rectangle(800, 0, obstacleWidth, upperObstacleHeight));
-                obstacles.add(new Rectangle(800, 600 - lowerObstacleHeight, obstacleWidth, lowerObstacleHeight));
+                Rectangle upperObstacle = new Rectangle(800, 0, obstacleWidth, upperObstacleHeight);
+                Rectangle lowerObstacle = new Rectangle(800, 600 - lowerObstacleHeight, obstacleWidth, lowerObstacleHeight);
 
+                obstacles.add(upperObstacle);
+                obstacleOriginalPositions.add(new Point(upperObstacle.x, upperObstacle.y));
+                obstacleDirections.add(0);
+
+                obstacles.add(lowerObstacle);
+                obstacleOriginalPositions.add(new Point(lowerObstacle.x, lowerObstacle.y));
+                obstacleDirections.add(1);
 
                 if (grapeImage != null && random.nextInt(5) == 0) {
                     int grapeWidth = grapeImage.getWidth();
@@ -279,4 +320,3 @@ public class WaterWorldLevel extends GameLevelPanel {
         }
     }
 }
-
