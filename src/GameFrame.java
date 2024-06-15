@@ -1,15 +1,27 @@
 import javax.swing.*;
 import java.awt.*;
+import javax.sound.sampled.*;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import java.io.File;
+import java.io.IOException;
+
 
 public class GameFrame extends JFrame {
     private CardLayout cardLayout = new CardLayout();
     private JPanel cardPanel = new JPanel(cardLayout);
-
+    private AudioPlayer audioPlayer;
     public GameFrame() {
         setTitle("Flappy Bird Game");
         setSize(800, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        audioPlayer = new AudioPlayer();
+        audioPlayer.playMusic("Angry-Birds-Theme-Song.wav"); // Specify the correct path to your audio file
 
         MainMenuPanel mainMenu = new MainMenuPanel(this, "/fonmainmenu.jpg");
         cardPanel.add(mainMenu, "MainMenu");
