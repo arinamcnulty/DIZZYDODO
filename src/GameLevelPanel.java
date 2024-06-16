@@ -4,6 +4,10 @@ import java.awt.*;
 public abstract class GameLevelPanel extends JPanel {
     protected GameFrame gameFrame;
 
+    protected void updateScore(String levelName, int score) {
+        GameScores.updateScore(levelName, score);
+    }
+
     public GameLevelPanel(GameFrame gameFrame) {
         this.gameFrame = gameFrame;
         setLayout(new BorderLayout());
@@ -17,4 +21,6 @@ public abstract class GameLevelPanel extends JPanel {
         topPanel.add(backButton);
         add(topPanel, BorderLayout.NORTH);
     }
+
+    public abstract void resetGame();
 }

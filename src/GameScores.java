@@ -5,9 +5,7 @@ public class GameScores {
     private static Map<String, Integer> highScores = new HashMap<>();
 
     public static void updateScore(String level, int score) {
-        if (score > highScores.getOrDefault(level, 0)) {
-            highScores.put(level, score);
-        }
+        highScores.put(level, highScores.getOrDefault(level, 0) + score);
     }
 
     public static int getHighScore(String level) {

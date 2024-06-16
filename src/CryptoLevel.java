@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Random;
 
 public class CryptoLevel extends GameLevelPanel {
+    private String levelName = "Crypto";
     private BufferedImage backgroundImage;
     private BufferedImage birdImage;
     private BufferedImage obstacleImage;
@@ -169,8 +170,10 @@ public class CryptoLevel extends GameLevelPanel {
             restartButton.setVisible(true);
             restartButton.setEnabled(true);
             JOptionPane.showMessageDialog(this, "Ви зібрали " + grapesCollected + " монет!");
+            updateScore(levelName, grapesCollected); // Оновлення скорсу після завершення гри
         }
     }
+
 
     public void resetGame() {
         birdX = 800 / 2 - birdImage.getWidth() / 2;

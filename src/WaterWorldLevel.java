@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Random;
 
 public class WaterWorldLevel extends GameLevelPanel {
+    private String levelName = "WaterWorld";
     private BufferedImage backgroundImage;
     private BufferedImage birdImage;
     private BufferedImage obstacleImage;
@@ -146,8 +147,10 @@ public class WaterWorldLevel extends GameLevelPanel {
             restartButton.setVisible(true);
             restartButton.setEnabled(true);
             JOptionPane.showMessageDialog(this, "Ви зібрали " + grapesCollected + " перлин!");
+            updateScore(levelName, grapesCollected); // Оновлення скорсу після завершення гри
         }
     }
+
 
     public void resetGame() {
         birdX = 800 / 2 - birdImage.getWidth() / 2;

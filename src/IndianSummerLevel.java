@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Random;
 
 public class IndianSummerLevel extends GameLevelPanel {
+    private String levelName = "IndianSummer";
     private BufferedImage backgroundImage;
     private BufferedImage birdImage;
     private BufferedImage obstacleImage;
@@ -143,7 +144,8 @@ public class IndianSummerLevel extends GameLevelPanel {
         if (restartButton != null) {
             restartButton.setVisible(true);
             restartButton.setEnabled(true);
-            JOptionPane.showMessageDialog(this, "Ви зібрали " + grapesCollected + " виноградинок!");
+            JOptionPane.showMessageDialog(this, "Ви зібрали " + grapesCollected + " штук!");
+            updateScore(levelName, grapesCollected); // Оновлення скорсу після завершення гри
         }
     }
 

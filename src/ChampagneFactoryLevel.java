@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Random;
 
 public class ChampagneFactoryLevel extends GameLevelPanel {
+    private String levelName = "ChampagneFactory";
     private BufferedImage backgroundImage;
     private BufferedImage birdImage;
     private BufferedImage obstacleImage;
@@ -146,6 +147,7 @@ public class ChampagneFactoryLevel extends GameLevelPanel {
             restartButton.setVisible(true);
             restartButton.setEnabled(true);
             JOptionPane.showMessageDialog(this, "Ви зібрали " + grapesCollected + " келихів!");
+            updateScore(levelName, grapesCollected); // Оновлення скорсу після завершення гри
         }
     }
 
@@ -302,4 +304,6 @@ public class ChampagneFactoryLevel extends GameLevelPanel {
             gameTimer.stop();
         }
     }
+
+
 }

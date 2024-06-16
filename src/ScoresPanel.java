@@ -5,21 +5,20 @@ import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.util.Map;
 
-public class ScoresPanel extends GameLevelPanel {
+public class ScoresPanel extends JPanel {
     private BufferedImage backgroundImage;
+    private GameFrame gameFrame;
 
     public ScoresPanel(GameFrame gameFrame) {
-        super(gameFrame);
-        loadBackgroundImage();
-    }
-
-    private void loadBackgroundImage() {
+        this.gameFrame = gameFrame;
+        setLayout(new BorderLayout());
         try {
             backgroundImage = ImageIO.read(getClass().getResource("/FONscores.jpg"));
         } catch (IOException e) {
             e.printStackTrace();
             backgroundImage = null;
         }
+        addBackButton();
     }
 
     @Override
@@ -37,5 +36,13 @@ public class ScoresPanel extends GameLevelPanel {
             g.drawString(entry.getKey() + ": " + entry.getValue(), 50, y);
             y += 30;
         }
+    }
+
+    private void addBackButton() {
+        JButton backButton = new JButton("Назад");
+        backButton.addActionListener(e -> gameFrame.switchTo("MainMenu"));
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        topPanel.add(backButton);
+        add(topPanel, BorderLayout.NORTH);
     }
 }

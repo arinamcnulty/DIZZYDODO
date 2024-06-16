@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Random;
 
 public class UnderworldLevel extends GameLevelPanel {
+    private String levelName = "Underworld";
     private BufferedImage backgroundImage;
     private BufferedImage birdImage;
     private BufferedImage obstacleImage;
@@ -157,8 +158,10 @@ public class UnderworldLevel extends GameLevelPanel {
             restartButton.setVisible(true);
             restartButton.setEnabled(true);
             JOptionPane.showMessageDialog(this, "Ви зібрали " + grapesCollected + " черепів!");
+            updateScore(levelName, grapesCollected); // Оновлення скорсу після завершення гри
         }
     }
+
 
     public void resetGame() {
         birdX = 800 / 2 - birdImage.getWidth() / 2;
