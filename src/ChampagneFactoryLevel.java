@@ -18,15 +18,17 @@ public class ChampagneFactoryLevel extends GameLevelPanel {
     private int birdY;
     private int birdX;
     private float vy = 0;
-    private final float GRAVITY = 1.0f; // Константа гравитации, увеличьте для более быстрого падения
+    private final float GRAVITY = 1.0f;
     private final int JUMP_STRENGTH = -8;
     private boolean gameStarted = false;
     private boolean gameOver = false;
     private JButton restartButton;
     private Timer gameTimer;
-    private List<Rectangle> obstacles; // Список препятствий
-    private List<Rectangle> grapes; // Список виноградинок
-    private int grapesCollected = 0; // Количество собранных виноградинок
+    private List<Rectangle> obstacles;
+    private List<Rectangle> grapes;
+    private List<Point> obstacleOriginalPositions;
+    private List<Integer> obstacleDirections;
+    private int grapesCollected = 0;
     private Random random;
 
     public ChampagneFactoryLevel(GameFrame gameFrame) {
@@ -36,7 +38,7 @@ public class ChampagneFactoryLevel extends GameLevelPanel {
         loadObstacleImage();
         loadGrapeImage();
         setFocusable(true);
-        requestFocusInWindow(); // Запрос на фокус
+        requestFocusInWindow();
         random = new Random();
         addMouseListener(new MouseAdapter() {
             @Override
@@ -45,7 +47,7 @@ public class ChampagneFactoryLevel extends GameLevelPanel {
                     gameStarted = true;
                 }
                 if (!gameOver) {
-                    jump(); // Подъем птички при нажатии на экран
+                    jump();
                 }
             }
         });
@@ -71,7 +73,7 @@ public class ChampagneFactoryLevel extends GameLevelPanel {
     private void loadBirdImage() {
         try {
             birdImage = ImageIO.read(getClass().getResource("/sticker,375x360.u2.png"));
-            birdImage = scaleImage(birdImage, 0.15); // Масштабирование изображения
+            birdImage = scaleImage(birdImage, 0.15);
         } catch (IOException e) {
             e.printStackTrace();
             birdImage = null;
@@ -81,8 +83,8 @@ public class ChampagneFactoryLevel extends GameLevelPanel {
     private void loadObstacleImage() {
         try {
             obstacleImage = ImageIO.read(getClass().getResource("/пляшкаКРИМ.png"));
-            obstacleImage = scaleImage(obstacleImage, 0.45); // Масштабирование изображения
-            flippedObstacleImage = flipImageVertically(obstacleImage); // Переворачиваем изображение для нижних препятствий
+            obstacleImage = scaleImage(obstacleImage, 0.65);
+            flippedObstacleImage = flipImageVertically(obstacleImage);
         } catch (IOException e) {
             e.printStackTrace();
             obstacleImage = null;
@@ -92,7 +94,7 @@ public class ChampagneFactoryLevel extends GameLevelPanel {
     private void loadGrapeImage() {
         try {
             grapeImage = ImageIO.read(getClass().getResource("/келих.png"));
-            grapeImage = scaleImage(grapeImage, 0.10); // Масштабирование изображения виноградинки
+            grapeImage = scaleImage(grapeImage, 0.10);
         } catch (IOException e) {
             e.printStackTrace();
             grapeImage = null;
@@ -120,7 +122,7 @@ public class ChampagneFactoryLevel extends GameLevelPanel {
     }
 
     private void jump() {
-        vy = JUMP_STRENGTH; // Поднимаем птичку вверх при нажатии
+        vy = JUMP_STRENGTH;
     }
 
     private void initRestartButton() {
@@ -128,9 +130,9 @@ public class ChampagneFactoryLevel extends GameLevelPanel {
         restartButton.setFont(new Font("Arial", Font.BOLD, 14));
         restartButton.setVisible(false);
         restartButton.setEnabled(false);
-        restartButton.setPreferredSize(new Dimension(200, 50)); // Задаем размер кнопки
+        restartButton.setPreferredSize(new Dimension(200, 50));
         restartButton.addActionListener(e -> {
-            resetGame(); // Перезапуск игры
+            resetGame();
             startMovement();
         });
         JPanel restartButtonPanel = new JPanel();
@@ -148,14 +150,16 @@ public class ChampagneFactoryLevel extends GameLevelPanel {
     }
 
     public void resetGame() {
-        birdX = 800 / 2 - birdImage.getWidth() / 2; // Начальная позиция по X
-        birdY = 600 / 2 - birdImage.getHeight() / 2; // Начальная позиция по Y
-        vy = 0; // Сброс вертикальной скорости
-        gameStarted = false; // Сброс состояния игры
-        gameOver = false; // Сброс состояния завершения игры
-        obstacles = new ArrayList<>(); // Очистка препятствий
-        grapes = new ArrayList<>(); // Очистка виноградинок
-        grapesCollected = 0; // Сброс количества собранных виноградинок
+        birdX = 800 / 2 - birdImage.getWidth() / 2;
+        birdY = 600 / 2 - birdImage.getHeight() / 2;
+        vy = 0;
+        gameStarted = false;
+        gameOver = false;
+        obstacles = new ArrayList<>();
+        grapes = new ArrayList<>();
+        obstacleOriginalPositions = new ArrayList<>();
+        obstacleDirections = new ArrayList<>();
+        grapesCollected = 0;
         if (restartButton != null) {
             restartButton.setVisible(false);
             restartButton.setEnabled(false);
@@ -171,69 +175,82 @@ public class ChampagneFactoryLevel extends GameLevelPanel {
         if (birdImage != null) {
             g.drawImage(birdImage, birdX, birdY, this);
         }
-        if (obstacleImage != null) {
-            for (Rectangle obstacle : obstacles) {
-                if (obstacle.y == 0) {
-                    g.drawImage(obstacleImage, obstacle.x, obstacle.y, obstacle.width, obstacle.height, this); // Верхнее препятствие
-                } else {
-                    g.drawImage(flippedObstacleImage, obstacle.x, obstacle.y, obstacle.width, obstacle.height, this); // Нижнее препятствие
-                }
-            }
+        for (Rectangle obstacle : obstacles) {
+            g.drawImage(obstacleImage, obstacle.x, obstacle.y, obstacle.width, obstacle.height, this);
         }
-        if (grapeImage != null) {
-            for (Rectangle grape : grapes) {
-                g.drawImage(grapeImage, grape.x, grape.y, grape.width, grape.height, this);
-            }
+        for (Rectangle grape : grapes) {
+            g.drawImage(grapeImage, grape.x, grape.y, grape.width, grape.height, this);
         }
     }
 
     private void updateBirdPosition() {
         if (gameStarted && !gameOver) {
-            vy += GRAVITY; // Гравитация увеличивает скорость падения
+            vy += GRAVITY;
             birdY += vy;
-            if (birdY + birdImage.getHeight() > 600) { // Проверка касания нижней части экрана
-                birdY = 600 - birdImage.getHeight(); // Предотвращаем выход за пределы экрана
-                vy = 0; // Останавливаем птичку, если она достигла дна
-                gameOver = true; // Останавливаем игру
-                showRestartButton(); // Показываем кнопку перезапуска
+            if (birdY + birdImage.getHeight() > 600) {
+                birdY = 600 - birdImage.getHeight();
+                vy = 0;
+                gameOver = true;
+                showRestartButton();
             } else if (birdY < 0) {
-                birdY = 0; // Предотвращаем выход за верхнюю границу
-                vy = 0; // Останавливаем птичку, если она достигла верха
+                birdY = 0;
+                vy = 0;
             }
 
-            // Обновляем позиции препятствий
             List<Rectangle> newObstacles = new ArrayList<>();
-            for (Rectangle obstacle : obstacles) {
+            List<Point> newObstacleOriginalPositions = new ArrayList<>();
+            List<Integer> newObstacleDirections = new ArrayList<>();
+            for (int i = 0; i < obstacles.size(); i++) {
+                Rectangle obstacle = obstacles.get(i);
+                Point originalPosition = obstacleOriginalPositions.get(i);
+                int direction = obstacleDirections.get(i);
+
                 obstacle.x -= 5;
+
+                if (direction == 1) {
+                    obstacle.y += 1;
+                    if (obstacle.y >= originalPosition.y + 10) {
+                        direction = -1;
+                    }
+                } else {
+                    obstacle.y -= 1;
+                    if (obstacle.y <= originalPosition.y - 10) {
+                        direction = 1;
+                    }
+                }
+
                 if (obstacle.x + obstacle.width > 0) {
                     newObstacles.add(obstacle);
+                    newObstacleOriginalPositions.add(originalPosition);
+                    newObstacleDirections.add(direction);
                 }
+
                 if (obstacle.intersects(new Rectangle(birdX, birdY, birdImage.getWidth(), birdImage.getHeight()))) {
                     gameOver = true;
                     showRestartButton();
                 }
             }
             obstacles = newObstacles;
+            obstacleOriginalPositions = newObstacleOriginalPositions;
+            obstacleDirections = newObstacleDirections;
 
-            // Обновляем позиции виноградинок
             List<Rectangle> newGrapes = new ArrayList<>();
             for (Rectangle grape : grapes) {
-                grape.x -= 2; // Виноградинки движутся медленнее, чем препятствия
+                grape.x -= 2;
                 if (grape.x + grape.width > 0) {
                     newGrapes.add(grape);
                 }
                 if (grape.intersects(new Rectangle(birdX, birdY, birdImage.getWidth(), birdImage.getHeight()))) {
                     grapesCollected++;
-                    newGrapes.remove(grape); // Удаляем виноградинку, если птичка ее собрала
+                    newGrapes.remove(grape);
                 }
             }
             grapes = newGrapes;
 
-            // Добавляем новые препятствия и виноградинки
             if (obstacles.isEmpty() || obstacles.get(obstacles.size() - 1).x < 600) {
-                int gapHeight = 300; // Высота промежутка между верхним и нижним препятствиями
-                int minObstacleHeight = 50; // Минимальная высота препятствия
-                int maxObstacleHeight = 300; // Максимальная высота препятствия
+                int gapHeight = 300;
+                int minObstacleHeight = 50;
+                int maxObstacleHeight = 300;
 
                 int obstacleHeight = minObstacleHeight + (int) (Math.random() * (maxObstacleHeight - minObstacleHeight));
                 int upperObstacleHeight = obstacleHeight;
@@ -246,11 +263,18 @@ public class ChampagneFactoryLevel extends GameLevelPanel {
 
                 int obstacleWidth = obstacleImage.getWidth();
 
-                obstacles.add(new Rectangle(800, 0, obstacleWidth, upperObstacleHeight)); // Верхнее препятствие
-                obstacles.add(new Rectangle(800, 600 - lowerObstacleHeight, obstacleWidth, lowerObstacleHeight)); // Нижнее препятствие
+                Rectangle upperObstacle = new Rectangle(800, 0, obstacleWidth, upperObstacleHeight);
+                Rectangle lowerObstacle = new Rectangle(800, 600 - lowerObstacleHeight, obstacleWidth, lowerObstacleHeight);
 
-                // Добавляем виноградинки с меньшей частотой
-                if (grapeImage != null && random.nextInt(5) == 0) { // Уменьшение частоты появления виноградинок
+                obstacles.add(upperObstacle);
+                obstacleOriginalPositions.add(new Point(upperObstacle.x, upperObstacle.y));
+                obstacleDirections.add(0);
+
+                obstacles.add(lowerObstacle);
+                obstacleOriginalPositions.add(new Point(lowerObstacle.x, lowerObstacle.y));
+                obstacleDirections.add(1);
+
+                if (grapeImage != null && random.nextInt(5) == 0) {
                     int grapeWidth = grapeImage.getWidth();
                     int grapeHeight = grapeImage.getHeight();
                     int grapeX = 800 + obstacleWidth / 2 - grapeWidth / 2;
@@ -279,4 +303,3 @@ public class ChampagneFactoryLevel extends GameLevelPanel {
         }
     }
 }
-
