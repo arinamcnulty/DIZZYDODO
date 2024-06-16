@@ -15,7 +15,7 @@ public class ScoresPanel extends JPanel {
         this.gameFrame = gameFrame;
         setLayout(new BorderLayout());
         try {
-            backgroundImage = ImageIO.read(getClass().getResource("/FONscores.jpg"));
+            backgroundImage = ImageIO.read(getClass().getResource("/FONscoresFON.png"));
         } catch (IOException e) {
             e.printStackTrace();
             backgroundImage = null;
@@ -30,7 +30,7 @@ public class ScoresPanel extends JPanel {
             g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
         }
 
-        g.setColor(Color.WHITE);
+        g.setColor(Color.BLACK);
         g.setFont(new Font("Arial", Font.BOLD, 24));
 
         FontMetrics fm = g.getFontMetrics();
