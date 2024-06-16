@@ -23,6 +23,7 @@ public class GameFrame extends JFrame {
         cardPanel.add(new ChampagneFactoryLevel(this), "ChampagneFactoryLevel");
         cardPanel.add(new CryptoLevel(this), "CryptoLevel");
         cardPanel.add(new ScoresPanel(this), "Scores");
+        cardPanel.add(new InfoPanel(this, "/infoBackground.jpg"), "InfoPanel");
         getContentPane().add(cardPanel);
         setVisible(true);
     }

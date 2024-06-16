@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.RoundRectangle2D;
 
 public class MainMenuPanel extends JPanel {
     private GameFrame gameFrame;
@@ -15,9 +14,8 @@ public class MainMenuPanel extends JPanel {
         }
         setLayout(new BorderLayout());
         initButtonsPanel();
+        addInfoButton();
     }
-
-
 
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -37,7 +35,7 @@ public class MainMenuPanel extends JPanel {
         buttonsPanel.add(titleLabel);
         buttonsPanel.add(Box.createVerticalStrut(20));
 
-        String[] buttonLabels = {"Indian Summer", "Underworld", "Water World", "Champagne Factory", "Crypto" , "Scores"};
+        String[] buttonLabels = {"Indian Summer", "Underworld", "Water World", "Champagne Factory", "Crypto", "Scores"};
         for (String label : buttonLabels) {
             JButton button = createRoundedButton(label);
             button.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -53,7 +51,6 @@ public class MainMenuPanel extends JPanel {
         add(buttonsPanel, BorderLayout.CENTER);
     }
 
-
     private JButton createRoundedButton(String text) {
         JButton button = new JButton(text) {
             protected void paintComponent(Graphics g) {
@@ -68,7 +65,6 @@ public class MainMenuPanel extends JPanel {
                 g2.setColor(Color.BLACK);
                 g2.drawRoundRect(0, 0, getWidth()-1, getHeight()-1, 20, 20);
             }
-
         };
         button.setForeground(Color.BLACK);
         button.setOpaque(false);
@@ -76,5 +72,19 @@ public class MainMenuPanel extends JPanel {
         button.setBorderPainted(true);
         button.setFocusPainted(false);
         return button;
+    }
+
+    private void addInfoButton() {
+        JButton infoButton = new JButton("Info");
+        infoButton.setFont(new Font("Arial", Font.BOLD, 14));
+        infoButton.addActionListener(e -> showInfoPanel());
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        topPanel.setOpaque(false);
+        topPanel.add(infoButton);
+        add(topPanel, BorderLayout.NORTH);
+    }
+
+    private void showInfoPanel() {
+        gameFrame.switchTo("InfoPanel");
     }
 }
