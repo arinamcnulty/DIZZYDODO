@@ -71,7 +71,7 @@ public class IndianSummerLevel extends GameLevelPanel {
 
     private void loadBirdImage() {
         try {
-            birdImage = ImageIO.read(getClass().getResource("/sticker,375x360.u2.png"));
+            birdImage = ImageIO.read(getClass().getResource("/jerry.png"));
             birdImage = scaleImage(birdImage, 0.15);
         } catch (IOException e) {
             e.printStackTrace();
