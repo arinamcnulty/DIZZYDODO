@@ -12,7 +12,7 @@ public class GameFrame extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         audioPlayer = new AudioPlayer();
-        audioPlayer.playMusic("Angry-Birds-Theme-Song.wav"); // Укажите правильный путь к вашему аудиофайлу
+        audioPlayer.playMusic("Angry-Birds-Theme-Song.wav");
 
         MainMenuPanel mainMenu = new MainMenuPanel(this, "/fonmainmenu.jpg");
         cardPanel.add(mainMenu, "MainMenu");

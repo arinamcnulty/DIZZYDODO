@@ -74,8 +74,8 @@ public class UnderworldLevel extends GameLevelPanel {
 
     private void loadBirdImage() {
         try {
-            birdImage = ImageIO.read(getClass().getResource("/sticker,375x360.u2.png"));
-            birdImage = scaleImage(birdImage, 0.15);
+            birdImage = ImageIO.read(getClass().getResource("/zombi.png"));
+            birdImage = scaleImage(birdImage, 0.12);
         } catch (IOException e) {
             e.printStackTrace();
             birdImage = null;
