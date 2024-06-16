@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-
 public class GameFrame extends JFrame {
     private CardLayout cardLayout = new CardLayout();
     private JPanel cardPanel = new JPanel(cardLayout);
@@ -30,6 +29,9 @@ public class GameFrame extends JFrame {
 
     public void switchTo(String cardName) {
         cardLayout.show(cardPanel, cardName);
+        if (cardName.equals("Scores")) {
+            ((ScoresPanel) cardPanel.getComponent(6)).repaint();
+        }
     }
 
     public static void main(String[] args) {

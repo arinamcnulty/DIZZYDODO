@@ -3,7 +3,9 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.IOException;
-import java.util.Map;
+import java.util.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ScoresPanel extends JPanel {
     private BufferedImage backgroundImage;
@@ -30,11 +32,25 @@ public class ScoresPanel extends JPanel {
 
         g.setColor(Color.WHITE);
         g.setFont(new Font("Arial", Font.BOLD, 24));
-        int y = 100;
-        Map<String, Integer> scores = GameScores.getAllScores();
-        for (Map.Entry<String, Integer> entry : scores.entrySet()) {
-            g.drawString(entry.getKey() + ": " + entry.getValue(), 50, y);
-            y += 30;
+
+        FontMetrics fm = g.getFontMetrics();
+        int panelWidth = getWidth();
+        int panelHeight = getHeight();
+
+        Map<String, Integer> scoresMap = GameScores.getAllScores();
+        List<Map.Entry<String, Integer>> scoresList = scoresMap.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue())
+                .collect(Collectors.toList());
+
+        int totalHeight = fm.getHeight() * scoresList.size();
+        int y = (panelHeight - totalHeight) / 2; // Відцентрувати по вертикалі
+
+        for (Map.Entry<String, Integer> entry : scoresList) {
+            String scoreText = entry.getKey() + ": " + entry.getValue();
+            int textWidth = fm.stringWidth(scoreText);
+            int x = (panelWidth - textWidth) / 2; // Відцентрувати по горизонталі
+            g.drawString(scoreText, x, y);
+            y += fm.getHeight();
         }
     }
 
