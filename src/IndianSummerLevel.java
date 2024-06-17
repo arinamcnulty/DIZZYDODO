@@ -1,3 +1,6 @@
+/*
+Рівень ІНДІАН САМЕР
+ */
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -60,7 +63,7 @@ public class IndianSummerLevel extends GameLevelPanel {
         startMovement();
     }
 
-    private void loadBackgroundImage() {
+    private void loadBackgroundImage() {  //фон
         try {
             backgroundImage = ImageIO.read(getClass().getResource("/indiansummerFON.jpg"));
         } catch (IOException e) {
@@ -69,7 +72,7 @@ public class IndianSummerLevel extends GameLevelPanel {
         }
     }
 
-    private void loadBirdImage() {
+    private void loadBirdImage() { //герой
         try {
             birdImage = ImageIO.read(getClass().getResource("/jerry.png"));
             birdImage = scaleImage(birdImage, 0.15);
@@ -79,7 +82,7 @@ public class IndianSummerLevel extends GameLevelPanel {
         }
     }
 
-    private void loadObstacleImage() {
+    private void loadObstacleImage() {  //перешкоди
         try {
             obstacleImage = ImageIO.read(getClass().getResource("/бочка.png"));
             obstacleImage = scaleImage(obstacleImage, 0.35);
@@ -90,7 +93,7 @@ public class IndianSummerLevel extends GameLevelPanel {
         }
     }
 
-    private void loadGrapeImage() {
+    private void loadGrapeImage() { //бонуси
         try {
             grapeImage = ImageIO.read(getClass().getResource("/виноград.png"));
             grapeImage = scaleImage(grapeImage, 0.15);
@@ -100,7 +103,7 @@ public class IndianSummerLevel extends GameLevelPanel {
         }
     }
 
-    private BufferedImage scaleImage(BufferedImage srcImg, double factor) {
+    private BufferedImage scaleImage(BufferedImage srcImg, double factor) { //відтворення зображення
         int scaledWidth = (int) (srcImg.getWidth() * factor);
         int scaledHeight = (int) (srcImg.getHeight() * factor);
         BufferedImage scaledImg = new BufferedImage(scaledWidth, scaledHeight, BufferedImage.TYPE_INT_ARGB);
@@ -110,7 +113,7 @@ public class IndianSummerLevel extends GameLevelPanel {
         return scaledImg;
     }
 
-    private BufferedImage flipImageVertically(BufferedImage srcImg) {
+    private BufferedImage flipImageVertically(BufferedImage srcImg) { //перегортаємо дзеркально перешкоду
         int width = srcImg.getWidth();
         int height = srcImg.getHeight();
         BufferedImage flippedImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
@@ -120,11 +123,11 @@ public class IndianSummerLevel extends GameLevelPanel {
         return flippedImg;
     }
 
-    private void jump() {
+    private void jump() { //стрибок вгору
         vy = JUMP_STRENGTH;
     }
 
-    private void initRestartButton() {
+    private void initRestartButton() { //рестарт
         restartButton = new JButton("ПЕРЕЗАПУСТИТИ");
         restartButton.setFont(new Font("Arial", Font.BOLD, 14));
         restartButton.setVisible(false);
@@ -140,7 +143,7 @@ public class IndianSummerLevel extends GameLevelPanel {
         this.add(restartButtonPanel, BorderLayout.CENTER);
     }
 
-    private void showRestartButton() {
+    private void showRestartButton() { //повідомлення про закінчення гри
         if (restartButton != null) {
             restartButton.setVisible(true);
             restartButton.setEnabled(true);
@@ -149,7 +152,7 @@ public class IndianSummerLevel extends GameLevelPanel {
         }
     }
 
-    public void resetGame() {
+    public void resetGame() { //перезапуск
         birdX = 800 / 2 - birdImage.getWidth() / 2;
         birdY = 600 / 2 - birdImage.getHeight() / 2;
         vy = 0;
@@ -165,7 +168,7 @@ public class IndianSummerLevel extends GameLevelPanel {
     }
 
     @Override
-    protected void paintComponent(Graphics g) {
+    protected void paintComponent(Graphics g) { //вимальовування
         super.paintComponent(g);
         if (backgroundImage != null) {
             g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
@@ -176,9 +179,9 @@ public class IndianSummerLevel extends GameLevelPanel {
         if (obstacleImage != null) {
             for (Rectangle obstacle : obstacles) {
                 if (obstacle.y == 0) {
-                    g.drawImage(obstacleImage, obstacle.x, obstacle.y, obstacle.width, obstacle.height, this); // Верхнее препятствие
+                    g.drawImage(obstacleImage, obstacle.x, obstacle.y, obstacle.width, obstacle.height, this);
                 } else {
-                    g.drawImage(flippedObstacleImage, obstacle.x, obstacle.y, obstacle.width, obstacle.height, this); // Нижнее препятствие
+                    g.drawImage(flippedObstacleImage, obstacle.x, obstacle.y, obstacle.width, obstacle.height, this);
                 }
             }
         }
@@ -189,7 +192,7 @@ public class IndianSummerLevel extends GameLevelPanel {
         }
     }
 
-    private void updateBirdPosition() {
+    private void updateBirdPosition() { //оновлення позиції героя
         if (gameStarted && !gameOver) {
             vy += GRAVITY;
             birdY += vy;
@@ -265,7 +268,7 @@ public class IndianSummerLevel extends GameLevelPanel {
         repaint();
     }
 
-    private void startMovement() {
+    private void startMovement() { //початок
         if (gameTimer != null) {
             gameTimer.stop();
         }
@@ -274,7 +277,7 @@ public class IndianSummerLevel extends GameLevelPanel {
     }
 
     @Override
-    public void removeNotify() {
+    public void removeNotify() { //умова старту-кінця
         super.removeNotify();
         if (gameTimer != null) {
             gameTimer.stop();

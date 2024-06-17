@@ -1,3 +1,6 @@
+/*
+Рівень ПІДВОДНИЙ СВІТ
+ */
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -27,8 +30,8 @@ public class WaterWorldLevel extends GameLevelPanel {
     private Timer gameTimer;
     private List<Rectangle> obstacles;
     private List<Rectangle> grapes;
-    private List<Point> obstacleOriginalPositions; // Исходные позиции нижних препятствий
-    private List<Integer> obstacleDirections; // Направления движения нижних препятствий
+    private List<Point> obstacleOriginalPositions;
+    private List<Integer> obstacleDirections;
     private int grapesCollected = 0;
     private Random random;
 
@@ -62,7 +65,7 @@ public class WaterWorldLevel extends GameLevelPanel {
         startMovement();
     }
 
-    private void loadBackgroundImage() {
+    private void loadBackgroundImage() { //фон
         try {
             backgroundImage = ImageIO.read(getClass().getResource("/waterworldlevelFON.jpg"));
         } catch (IOException e) {
@@ -71,7 +74,7 @@ public class WaterWorldLevel extends GameLevelPanel {
         }
     }
 
-    private void loadBirdImage() {
+    private void loadBirdImage() { //герой
         try {
             birdImage = ImageIO.read(getClass().getResource("/spanchbob.png"));
             birdImage = scaleImage(birdImage, 0.13);
@@ -81,7 +84,7 @@ public class WaterWorldLevel extends GameLevelPanel {
         }
     }
 
-    private void loadObstacleImage() {
+    private void loadObstacleImage() { //перешкоди
         try {
             obstacleImage = ImageIO.read(getClass().getResource("/трава.jpg"));
             obstacleImage = scaleImage(obstacleImage, 0.35);
@@ -92,7 +95,7 @@ public class WaterWorldLevel extends GameLevelPanel {
         }
     }
 
-    private void loadGrapeImage() {
+    private void loadGrapeImage() { //бонуси
         try {
             grapeImage = ImageIO.read(getClass().getResource("/ракушка.jpg"));
             grapeImage = scaleImage(grapeImage, 0.15);
@@ -102,7 +105,7 @@ public class WaterWorldLevel extends GameLevelPanel {
         }
     }
 
-    private BufferedImage scaleImage(BufferedImage srcImg, double factor) {
+    private BufferedImage scaleImage(BufferedImage srcImg, double factor) { //фото
         int scaledWidth = (int) (srcImg.getWidth() * factor);
         int scaledHeight = (int) (srcImg.getHeight() * factor);
         BufferedImage scaledImg = new BufferedImage(scaledWidth, scaledHeight, BufferedImage.TYPE_INT_ARGB);
@@ -112,7 +115,7 @@ public class WaterWorldLevel extends GameLevelPanel {
         return scaledImg;
     }
 
-    private BufferedImage flipImageVertically(BufferedImage srcImg) {
+    private BufferedImage flipImageVertically(BufferedImage srcImg) { //симетричне відображення
         int width = srcImg.getWidth();
         int height = srcImg.getHeight();
         BufferedImage flippedImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
@@ -126,7 +129,7 @@ public class WaterWorldLevel extends GameLevelPanel {
         vy = JUMP_STRENGTH;
     }
 
-    private void initRestartButton() {
+    private void initRestartButton() { //рестарт гри
         restartButton = new JButton("ПЕРЕЗАПУСТИТИ");
         restartButton.setFont(new Font("Arial", Font.BOLD, 14));
         restartButton.setVisible(false);
@@ -142,7 +145,7 @@ public class WaterWorldLevel extends GameLevelPanel {
         this.add(restartButtonPanel, BorderLayout.CENTER);
     }
 
-    private void showRestartButton() {
+    private void showRestartButton() { //повідомлення про кінець
         if (restartButton != null) {
             restartButton.setVisible(true);
             restartButton.setEnabled(true);
@@ -152,7 +155,7 @@ public class WaterWorldLevel extends GameLevelPanel {
     }
 
 
-    public void resetGame() {
+    public void resetGame() { //рестарт
         birdX = 800 / 2 - birdImage.getWidth() / 2;
         birdY = 600 / 2 - birdImage.getHeight() / 2;
         vy = 0;
@@ -170,7 +173,7 @@ public class WaterWorldLevel extends GameLevelPanel {
     }
 
     @Override
-    protected void paintComponent(Graphics g) {
+    protected void paintComponent(Graphics g) { //вимальовування
         super.paintComponent(g);
         if (backgroundImage != null) {
             g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
@@ -194,7 +197,7 @@ public class WaterWorldLevel extends GameLevelPanel {
         }
     }
 
-    private void updateBirdPosition() {
+    private void updateBirdPosition() { //оновлення позиції пташки
         if (gameStarted && !gameOver) {
             vy += GRAVITY;
             birdY += vy;
@@ -307,7 +310,7 @@ public class WaterWorldLevel extends GameLevelPanel {
         repaint();
     }
 
-    private void startMovement() {
+    private void startMovement() { //початок
         if (gameTimer != null) {
             gameTimer.stop();
         }
@@ -316,7 +319,7 @@ public class WaterWorldLevel extends GameLevelPanel {
     }
 
     @Override
-    public void removeNotify() {
+    public void removeNotify() { //умова старту-кінця
         super.removeNotify();
         if (gameTimer != null) {
             gameTimer.stop();

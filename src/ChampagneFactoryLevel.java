@@ -1,3 +1,7 @@
+/*
+Рівень ЗАВОД ШАМПАНСЬКИХ ВИН
+*/
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -62,7 +66,7 @@ public class ChampagneFactoryLevel extends GameLevelPanel {
         startMovement();
     }
 
-    private void loadBackgroundImage() {
+    private void loadBackgroundImage() { //завантаження фона
         try {
             backgroundImage = ImageIO.read(getClass().getResource("/champagnefactorylevelFON.jpg"));
         } catch (IOException e) {
@@ -71,7 +75,7 @@ public class ChampagneFactoryLevel extends GameLevelPanel {
         }
     }
 
-    private void loadBirdImage() {
+    private void loadBirdImage() { //завантаження головного героя
         try {
             birdImage = ImageIO.read(getClass().getResource("/rabitface.png"));
             birdImage = scaleImage(birdImage, 0.20);
@@ -81,7 +85,7 @@ public class ChampagneFactoryLevel extends GameLevelPanel {
         }
     }
 
-    private void loadObstacleImage() {
+    private void loadObstacleImage() { //завантаження перешкод
         try {
             obstacleImage = ImageIO.read(getClass().getResource("/пляшкаКРИМ.png"));
             obstacleImage = scaleImage(obstacleImage, 0.65);
@@ -92,7 +96,7 @@ public class ChampagneFactoryLevel extends GameLevelPanel {
         }
     }
 
-    private void loadGrapeImage() {
+    private void loadGrapeImage() { //завантаження бонусів
         try {
             grapeImage = ImageIO.read(getClass().getResource("/келих.png"));
             grapeImage = scaleImage(grapeImage, 0.10);
@@ -102,7 +106,7 @@ public class ChampagneFactoryLevel extends GameLevelPanel {
         }
     }
 
-    private BufferedImage scaleImage(BufferedImage srcImg, double factor) {
+    private BufferedImage scaleImage(BufferedImage srcImg, double factor) {  //відтворення зображення
         int scaledWidth = (int) (srcImg.getWidth() * factor);
         int scaledHeight = (int) (srcImg.getHeight() * factor);
         BufferedImage scaledImg = new BufferedImage(scaledWidth, scaledHeight, BufferedImage.TYPE_INT_ARGB);
@@ -112,7 +116,7 @@ public class ChampagneFactoryLevel extends GameLevelPanel {
         return scaledImg;
     }
 
-    private BufferedImage flipImageVertically(BufferedImage srcImg) {
+    private BufferedImage flipImageVertically(BufferedImage srcImg) { //перегортаємо зображення
         int width = srcImg.getWidth();
         int height = srcImg.getHeight();
         BufferedImage flippedImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
@@ -122,11 +126,11 @@ public class ChampagneFactoryLevel extends GameLevelPanel {
         return flippedImg;
     }
 
-    private void jump() {
+    private void jump() {   //підняття вгору
         vy = JUMP_STRENGTH;
     }
 
-    private void initRestartButton() {
+    private void initRestartButton() {   //рестарт гри
         restartButton = new JButton("ПЕРЕЗАПУСТИТИ");
         restartButton.setFont(new Font("Arial", Font.BOLD, 14));
         restartButton.setVisible(false);
@@ -142,7 +146,7 @@ public class ChampagneFactoryLevel extends GameLevelPanel {
         this.add(restartButtonPanel, BorderLayout.CENTER);
     }
 
-    private void showRestartButton() {
+    private void showRestartButton() { //повідомлення про завершення гри
         if (restartButton != null) {
             restartButton.setVisible(true);
             restartButton.setEnabled(true);
@@ -151,7 +155,7 @@ public class ChampagneFactoryLevel extends GameLevelPanel {
         }
     }
 
-    public void resetGame() {
+    public void resetGame() {        //перезапуск
         birdX = 800 / 2 - birdImage.getWidth() / 2;
         birdY = 600 / 2 - birdImage.getHeight() / 2;
         vy = 0;
@@ -169,7 +173,7 @@ public class ChampagneFactoryLevel extends GameLevelPanel {
     }
 
     @Override
-    protected void paintComponent(Graphics g) {
+    protected void paintComponent(Graphics g) {  //перешкоди, фон, герой
         super.paintComponent(g);
         if (backgroundImage != null) {
             g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
@@ -185,7 +189,7 @@ public class ChampagneFactoryLevel extends GameLevelPanel {
         }
     }
 
-    private void updateBirdPosition() {
+    private void updateBirdPosition() {  //оновлення позиції птаха
         if (gameStarted && !gameOver) {
             vy += GRAVITY;
             birdY += vy;
@@ -289,7 +293,7 @@ public class ChampagneFactoryLevel extends GameLevelPanel {
         repaint();
     }
 
-    private void startMovement() {
+    private void startMovement() {  //початок гри
         if (gameTimer != null) {
             gameTimer.stop();
         }
@@ -298,7 +302,7 @@ public class ChampagneFactoryLevel extends GameLevelPanel {
     }
 
     @Override
-    public void removeNotify() {
+    public void removeNotify() {    //умова старту-кінця
         super.removeNotify();
         if (gameTimer != null) {
             gameTimer.stop();

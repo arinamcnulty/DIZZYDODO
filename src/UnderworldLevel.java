@@ -1,3 +1,6 @@
+/*
+Рівень ПІДЗЕМНИЙ СВІТ
+ */
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -38,7 +41,7 @@ public class UnderworldLevel extends GameLevelPanel {
         loadBirdImage();
         loadObstacleImage();
         loadGrapeImage();
-        loadSkeletonImage(); // Загрузка образа скелета
+        loadSkeletonImage();
         setFocusable(true);
         requestFocusInWindow();
         random = new Random();
@@ -63,7 +66,7 @@ public class UnderworldLevel extends GameLevelPanel {
         startMovement();
     }
 
-    private void loadBackgroundImage() {
+    private void loadBackgroundImage() { //фон
         try {
             backgroundImage = ImageIO.read(getClass().getResource("/underworldlevelFON.jpg"));
         } catch (IOException e) {
@@ -72,7 +75,7 @@ public class UnderworldLevel extends GameLevelPanel {
         }
     }
 
-    private void loadBirdImage() {
+    private void loadBirdImage() { //герой
         try {
             birdImage = ImageIO.read(getClass().getResource("/zombi.png"));
             birdImage = scaleImage(birdImage, 0.12);
@@ -82,7 +85,7 @@ public class UnderworldLevel extends GameLevelPanel {
         }
     }
 
-    private void loadObstacleImage() {
+    private void loadObstacleImage() { //перешкоди
         try {
             obstacleImage = ImageIO.read(getClass().getResource("/гроб (1).jpg"));
             obstacleImage = scaleImage(obstacleImage, 0.45);
@@ -93,7 +96,7 @@ public class UnderworldLevel extends GameLevelPanel {
         }
     }
 
-    private void loadGrapeImage() {
+    private void loadGrapeImage() { //бонуси
         try {
             grapeImage = ImageIO.read(getClass().getResource("/череп (1).jpg"));
             grapeImage = scaleImage(grapeImage, 0.10);
@@ -103,7 +106,7 @@ public class UnderworldLevel extends GameLevelPanel {
         }
     }
 
-    private void loadSkeletonImage() {
+    private void loadSkeletonImage() { //перешкоди
         try {
             skeletonImage = ImageIO.read(getClass().getResource("/скелет (1).jpg"));
             skeletonImage = scaleImage(skeletonImage, 0.10);
@@ -113,7 +116,7 @@ public class UnderworldLevel extends GameLevelPanel {
         }
     }
 
-    private BufferedImage scaleImage(BufferedImage srcImg, double factor) {
+    private BufferedImage scaleImage(BufferedImage srcImg, double factor) { //зображення
         int scaledWidth = (int) (srcImg.getWidth() * factor);
         int scaledHeight = (int) (srcImg.getHeight() * factor);
         BufferedImage scaledImg = new BufferedImage(scaledWidth, scaledHeight, BufferedImage.TYPE_INT_ARGB);
@@ -123,7 +126,7 @@ public class UnderworldLevel extends GameLevelPanel {
         return scaledImg;
     }
 
-    private BufferedImage flipImageVertically(BufferedImage srcImg) {
+    private BufferedImage flipImageVertically(BufferedImage srcImg) { //вертикально відображаємо перешкоди
         int width = srcImg.getWidth();
         int height = srcImg.getHeight();
         BufferedImage flippedImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
@@ -133,11 +136,11 @@ public class UnderworldLevel extends GameLevelPanel {
         return flippedImg;
     }
 
-    private void jump() {
+    private void jump() { //стрибок в гору
         vy = JUMP_STRENGTH;
     }
 
-    private void initRestartButton() {
+    private void initRestartButton() { //перезапуск
         restartButton = new JButton("ПЕРЕЗАПУСТИТИ");
         restartButton.setFont(new Font("Arial", Font.BOLD, 14));
         restartButton.setVisible(false);
@@ -153,7 +156,7 @@ public class UnderworldLevel extends GameLevelPanel {
         this.add(restartButtonPanel, BorderLayout.CENTER);
     }
 
-    private void showRestartButton() {
+    private void showRestartButton() { //рестарт+повідомлення
         if (restartButton != null) {
             restartButton.setVisible(true);
             restartButton.setEnabled(true);
@@ -171,7 +174,7 @@ public class UnderworldLevel extends GameLevelPanel {
         gameOver = false;
         obstacles = new ArrayList<>();
         grapes = new ArrayList<>();
-        skeletons = new ArrayList<>(); // Сброс списка скелетов
+        skeletons = new ArrayList<>(); // скидуємо список скелетів
         grapesCollected = 0;
         if (restartButton != null) {
             restartButton.setVisible(false);
@@ -180,7 +183,7 @@ public class UnderworldLevel extends GameLevelPanel {
     }
 
     @Override
-    protected void paintComponent(Graphics g) {
+    protected void paintComponent(Graphics g) { // вимальовування
         super.paintComponent(g);
         if (backgroundImage != null) {
             g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
@@ -209,7 +212,7 @@ public class UnderworldLevel extends GameLevelPanel {
         }
     }
 
-    private void updateBirdPosition() {
+    private void updateBirdPosition() { //онолвення позиції птаха
         if (gameStarted && !gameOver) {
             vy += GRAVITY;
             birdY += vy;
@@ -251,7 +254,7 @@ public class UnderworldLevel extends GameLevelPanel {
 
             List<Rectangle> newSkeletons = new ArrayList<>();
             for (Rectangle skeleton : skeletons) {
-                skeleton.y += 5; // Падение скелетов вниз
+                skeleton.y += 5;
                 if (skeleton.y < 600) {
                     newSkeletons.add(skeleton);
                 }
@@ -304,7 +307,7 @@ public class UnderworldLevel extends GameLevelPanel {
         repaint();
     }
 
-    private void startMovement() {
+    private void startMovement() { //початок
         if (gameTimer != null) {
             gameTimer.stop();
         }
@@ -313,7 +316,7 @@ public class UnderworldLevel extends GameLevelPanel {
     }
 
     @Override
-    public void removeNotify() {
+    public void removeNotify() { //умова старту-кінця
         super.removeNotify();
         if (gameTimer != null) {
             gameTimer.stop();
