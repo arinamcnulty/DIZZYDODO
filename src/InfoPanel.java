@@ -1,3 +1,6 @@
+/*
+Кнопка для інформації про гру користувачу
+ */
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -6,7 +9,7 @@ public class InfoPanel extends JPanel {
     private GameFrame gameFrame;
     private Image backgroundImage;
 
-    public InfoPanel(GameFrame gameFrame, String fileName) {
+    public InfoPanel(GameFrame gameFrame, String fileName) { //фон
         this.gameFrame = gameFrame;
         try {
             backgroundImage = ImageIO.read(getClass().getResource("/INFO.jpg"));
@@ -22,7 +25,7 @@ public class InfoPanel extends JPanel {
         g.drawImage(backgroundImage, 0, 0, this.getWidth(), this.getHeight(), this);
     }
 
-    private void addBackButton() {
+    private void addBackButton() { //кнопка назад
         JButton backButton = new JButton("Назад");
         backButton.setFont(new Font("Arial", Font.BOLD, 14));
         backButton.addActionListener(e -> gameFrame.switchTo("MainMenu"));

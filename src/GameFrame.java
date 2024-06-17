@@ -1,3 +1,6 @@
+/*
+Головний клас для запуску гри Dizzy DODO .
+ */
 import javax.swing.*;
 import java.awt.*;
 public class GameFrame extends JFrame {

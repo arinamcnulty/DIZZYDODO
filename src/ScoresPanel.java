@@ -1,3 +1,6 @@
+/*
+Клас для відображення кількості балів (бонусів) зібраних на окжному рівні окремо . Бонуси накопичуються
+ */
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -11,7 +14,7 @@ public class ScoresPanel extends JPanel {
     private BufferedImage backgroundImage;
     private GameFrame gameFrame;
 
-    public ScoresPanel(GameFrame gameFrame) {
+    public ScoresPanel(GameFrame gameFrame) { //панель з результатами
         this.gameFrame = gameFrame;
         setLayout(new BorderLayout());
         try {
@@ -24,7 +27,7 @@ public class ScoresPanel extends JPanel {
     }
 
     @Override
-    protected void paintComponent(Graphics g) {
+    protected void paintComponent(Graphics g) { //відображення
         super.paintComponent(g);
         if (backgroundImage != null) {
             g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
@@ -54,7 +57,7 @@ public class ScoresPanel extends JPanel {
         }
     }
 
-    private void addBackButton() {
+    private void addBackButton() { //кнопка НАЗАД
         JButton backButton = new JButton("Назад");
         backButton.addActionListener(e -> gameFrame.switchTo("MainMenu"));
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));

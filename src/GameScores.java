@@ -1,10 +1,13 @@
+/*
+Клас з мапами для зберігання результатів кожного рівня
+ */
 import java.util.HashMap;
 import java.util.Map;
 
 public class GameScores {
     private static Map<String, Integer> highScores = new HashMap<>();
 
-    public static void updateScore(String level, int score) {
+    public static void updateScore(String level, int score) { //оновлення балів
         highScores.put(level, highScores.getOrDefault(level, 0) + score);
     }
 

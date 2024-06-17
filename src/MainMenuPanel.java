@@ -1,3 +1,6 @@
+/*
+Клас для логіки основного меню
+ */
 import javax.swing.*;
 import java.awt.*;
 
@@ -17,12 +20,12 @@ public class MainMenuPanel extends JPanel {
         addInfoButton();
     }
 
-    protected void paintComponent(Graphics g) {
+    protected void paintComponent(Graphics g) { //вимальовування компонентів
         super.paintComponent(g);
         g.drawImage(backgroundImage, 0, 0, this.getWidth(), this.getHeight(), this);
     }
 
-    private void initButtonsPanel() {
+    private void initButtonsPanel() { //меню
         JPanel buttonsPanel = new JPanel();
         buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
         buttonsPanel.setOpaque(false);
@@ -51,7 +54,7 @@ public class MainMenuPanel extends JPanel {
         add(buttonsPanel, BorderLayout.CENTER);
     }
 
-    private JButton createRoundedButton(String text) {
+    private JButton createRoundedButton(String text) { //форма кнопок
         JButton button = new JButton(text) {
             protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g;
@@ -74,7 +77,7 @@ public class MainMenuPanel extends JPanel {
         return button;
     }
 
-    private void addInfoButton() {
+    private void addInfoButton() { //+кнопка інфо
         JButton infoButton = new JButton("Info");
         infoButton.setFont(new Font("Arial", Font.BOLD, 14));
         infoButton.addActionListener(e -> showInfoPanel());
@@ -84,7 +87,7 @@ public class MainMenuPanel extends JPanel {
         add(topPanel, BorderLayout.NORTH);
     }
 
-    private void showInfoPanel() {
+    private void showInfoPanel() { //показ інфо кнопки
         gameFrame.switchTo("InfoPanel");
     }
 }
