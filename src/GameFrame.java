@@ -1,8 +1,6 @@
-/*
-Головний клас для запуску гри Dizzy DODO .
- */
 import javax.swing.*;
 import java.awt.*;
+
 public class GameFrame extends JFrame {
     private CardLayout cardLayout = new CardLayout();
     private JPanel cardPanel = new JPanel(cardLayout);
@@ -15,7 +13,7 @@ public class GameFrame extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         audioPlayer = new AudioPlayer();
-        audioPlayer.playMusic("Angry-Birds-Theme-Song.wav");
+        audioPlayer.playMusic("src/Angry-Birds-Theme-Song.wav");
 
         MainMenuPanel mainMenu = new MainMenuPanel(this, "/fonmainmenu.jpg");
         cardPanel.add(mainMenu, "MainMenu");
@@ -31,7 +29,13 @@ public class GameFrame extends JFrame {
         setVisible(true);
     }
 
+    public AudioPlayer getAudioPlayer() {
+        return audioPlayer;
+    }
+
     public void switchTo(String cardName) {
+        cardLayout.show(cardPanel, cardName);
+        audioPlayer.playLevelMusic(cardName);  // Play the music associated with the level
         cardLayout.show(cardPanel, cardName);
         if (cardName.equals("Scores")) {
             ((ScoresPanel) cardPanel.getComponent(6)).repaint();

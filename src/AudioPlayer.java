@@ -1,29 +1,51 @@
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AudioPlayer {
     private Clip clip;
+    private Map<String, String> musicPaths;
 
-    // Correct method declaration with a proper parameter
+    public AudioPlayer() {
+        // Initialize the music paths for each level
+        musicPaths = new HashMap<>();
+        musicPaths.put("MainMenu", "src/Angry-Birds-Theme-Song.wav");
+        musicPaths.put("IndianSummerLevel", "src/President-Coco-Jambo.wav");
+        musicPaths.put("ChampagneFactoryLevel", "src/Riikka-Ievan_Polkka-world.wav");
+        musicPaths.put("UnderworldLevel", "src/Guenta-K.-Das-Boot.wav");
+        musicPaths.put("Scores", "src/Guenta-K.-Das-Boot.wav");
+        musicPaths.put("CryptoLevel", "src/Los-Del-RioMacarena.wav");
+        musicPaths.put("WaterWorldLevel", "src/Los-Del-RioMacarena.wav");
+    }
+
+    public void playLevelMusic(String levelName) {
+        if (musicPaths.containsKey(levelName)) {
+            playMusic(musicPaths.get(levelName));
+        } else {
+            System.out.println("No music found for: " + levelName);
+        }
+    }
+
     public void playMusic(String filePath) {
         try {
-            // Correct file path with double backslashes and quotes
-            File musicPath = new File("C:\\Users\\user\\Desktop\\DIZZYDODO\\src\\Angry-Birds-Theme-Song.wav");
+            if (clip != null && clip.isRunning()) {
+                clip.stop();  // Stop the currently playing music
+                clip.close(); // Close the clip to release resources
+            }
+            File musicPath = new File(filePath);
             if (musicPath.exists()) {
                 AudioInputStream audioInput = AudioSystem.getAudioInputStream(musicPath);
                 clip = AudioSystem.getClip();
                 clip.open(audioInput);
                 clip.start();
-                clip.loop(Clip.LOOP_CONTINUOUSLY); // To loop the music
+                clip.loop(Clip.LOOP_CONTINUOUSLY);
             } else {
-                System.out.println("Can't find file");
+                System.out.println("File does not exist: " + filePath);
             }
-        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+        } catch (Exception e) {
+            System.out.println("Error playing file: " + filePath);
             e.printStackTrace();
         }
     }
@@ -31,6 +53,7 @@ public class AudioPlayer {
     public void stopMusic() {
         if (clip != null) {
             clip.stop();
+            clip.close();
         }
     }
 }

@@ -12,7 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+
 public class IndianSummerLevel extends GameLevelPanel {
+
     private String levelName = "IndianSummer";
     private BufferedImage backgroundImage;
     private BufferedImage birdImage;
@@ -32,6 +34,7 @@ public class IndianSummerLevel extends GameLevelPanel {
     private List<Rectangle> grapes;
     private int grapesCollected = 0;
     private Random random;
+
 
     public IndianSummerLevel(GameFrame gameFrame) {
         super(gameFrame);
